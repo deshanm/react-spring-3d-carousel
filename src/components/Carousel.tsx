@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import styled from "@emotion/styled";
+
+import PropTypes from "prop-types";
 import Slide from "./Slide";
 import leftNavigation from "../static/LeftNavigation.png";
 import rightNavigation from "../static/RightNavigation.png";
-import PropTypes from "prop-types";
+import styled from "@emotion/styled";
 
 const Wrapper = styled.div`
   position: relative;
@@ -41,6 +42,7 @@ interface IProps {
   offsetRadius: number;
   animationConfig: object;
   goToSlideDelay: number;
+  onMove: (index:number) => void;
 }
 
 function mod(a: number, b: number): number {
@@ -116,6 +118,10 @@ class Carousel extends Component<IProps, IState> {
     this.setState({
       index: this.modBySlidesLength(this.state.index + direction),
       goToSlide: null
+    }, ()=>{
+      if(this.props.onMove){
+        this.props.onMove(this.state.index)
+      }
     });
   };
 
@@ -150,6 +156,10 @@ class Carousel extends Component<IProps, IState> {
         index: this.modBySlidesLength(index + direction),
         newSlide: isFinished,
         goToSlide: isFinished ? null : goToSlide
+      }, ()=>{
+        if(this.props.onMove){
+          this.props.onMove(this.state.index)
+        }
       });
     }
   };
